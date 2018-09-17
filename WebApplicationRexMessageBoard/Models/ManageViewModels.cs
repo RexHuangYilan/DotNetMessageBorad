@@ -39,6 +39,14 @@ namespace WebApplicationRexMessageBoard.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class SetUserNameViewModel
+    {
+        [Required]
+        [StringLength(255, ErrorMessage = "{0} 的長度至少必須為 {2} 個字元。", MinimumLength = 1)]
+        [Display(Name = "暱稱")]
+        public string UserName { get; set; }
+    }
+
     public class ChangePasswordViewModel
     {
         [Required]
