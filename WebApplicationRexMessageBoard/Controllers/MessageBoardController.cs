@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -17,8 +18,8 @@ namespace WebApplicationRexMessageBoard
         // GET: MessageBoard
         public ActionResult Index()
         {
-            var messageBoardModels = db.MessageBoardModels.Include(m => m.User);
-            return View(messageBoardModels.ToList());
+            //var messageBoardModels = db.MessageBoardModels.Include(m => m.User);
+            return View(db.MessageBoardModels.ToList());
         }
 
         // GET: MessageBoard/Details/5
@@ -39,7 +40,7 @@ namespace WebApplicationRexMessageBoard
         // GET: MessageBoard/Create
         public ActionResult Create()
         {
-            ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email");
+            //ViewBag.UserID = new SelectList(db.MessageBoardModels.User);
             return View();
         }
 
@@ -52,12 +53,14 @@ namespace WebApplicationRexMessageBoard
         {
             if (ModelState.IsValid)
             {
+                messageBoardModel.CreateTime = DateTime.Now;
+                messageBoardModel.UserID = User.Identity.GetUserId();
                 db.MessageBoardModels.Add(messageBoardModel);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
+            //ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
             return View(messageBoardModel);
         }
 
@@ -73,7 +76,7 @@ namespace WebApplicationRexMessageBoard
             {
                 return HttpNotFound();
             }
-            ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
+            //ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
             return View(messageBoardModel);
         }
 
@@ -86,11 +89,13 @@ namespace WebApplicationRexMessageBoard
         {
             if (ModelState.IsValid)
             {
+                messageBoardModel.CreateTime = DateTime.Now;
+                messageBoardModel.UserID = User.Identity.GetUserId();
                 db.Entry(messageBoardModel).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
+            //ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
             return View(messageBoardModel);
         }
 

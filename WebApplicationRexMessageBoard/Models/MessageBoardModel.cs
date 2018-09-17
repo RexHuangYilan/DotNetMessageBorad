@@ -22,7 +22,7 @@ namespace WebApplicationRexMessageBoard.Models
         //[NotMapped]
         public DateTime? CreateTime { get; set; }
 
-        [Required]
+        //[Required]
         public string UserID { get; set; }
         
         public virtual ApplicationUser User { get; set; }
