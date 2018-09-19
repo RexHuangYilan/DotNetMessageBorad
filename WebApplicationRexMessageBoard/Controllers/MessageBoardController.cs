@@ -92,9 +92,11 @@ namespace WebApplicationRexMessageBoard
         {
             if (ModelState.IsValid && messageBoardModel.UserID == User.Identity.GetUserId())
             {
-                messageBoardModel.CreateTime = DateTime.Now;
-                messageBoardModel.UserID = User.Identity.GetUserId();
-                db.Entry(messageBoardModel).State = EntityState.Modified;
+                MessageBoardModel messageBoard = db.MessageBoardModels.Find(messageBoardModel.ID);
+                messageBoard.Title = messageBoardModel.Title;
+                messageBoard.Content = messageBoardModel.Content;
+
+                db.Entry(messageBoard).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
