@@ -1,4 +1,6 @@
 ﻿@model WebApplicationRexMessageBoard.Models.MessageBoardModel
+@using Microsoft.AspNet.Identity
+
 
 @{
     ViewBag.Title = "Details";
@@ -45,6 +47,9 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @if (Request.IsAuthenticated && Model.User.Id == User.Identity.GetUserId())
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) @(" | ")
+    }
     @Html.ActionLink("Back to List", "Index")
 </p>

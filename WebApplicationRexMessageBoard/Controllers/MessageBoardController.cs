@@ -11,11 +11,13 @@ using WebApplicationRexMessageBoard.Models;
 
 namespace WebApplicationRexMessageBoard
 {
+    [Authorize]
     public class MessageBoardController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: MessageBoard
+        [AllowAnonymous]
         public ActionResult Index()
         {
             //var messageBoardModels = db.MessageBoardModels.Include(m => m.User);
@@ -23,6 +25,7 @@ namespace WebApplicationRexMessageBoard
         }
 
         // GET: MessageBoard/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -72,7 +75,7 @@ namespace WebApplicationRexMessageBoard
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             MessageBoardModel messageBoardModel = db.MessageBoardModels.Find(id);
-            if (messageBoardModel == null)
+            if (messageBoardModel == null || messageBoardModel.UserID != User.Identity.GetUserId())
             {
                 return HttpNotFound();
             }
@@ -87,7 +90,7 @@ namespace WebApplicationRexMessageBoard
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Title,Content,CreateTime,UserID")] MessageBoardModel messageBoardModel)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && messageBoardModel.UserID == User.Identity.GetUserId())
             {
                 messageBoardModel.CreateTime = DateTime.Now;
                 messageBoardModel.UserID = User.Identity.GetUserId();
@@ -107,7 +110,7 @@ namespace WebApplicationRexMessageBoard
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             MessageBoardModel messageBoardModel = db.MessageBoardModels.Find(id);
-            if (messageBoardModel == null)
+            if (messageBoardModel == null || messageBoardModel.UserID != User.Identity.GetUserId())
             {
                 return HttpNotFound();
             }
@@ -120,6 +123,10 @@ namespace WebApplicationRexMessageBoard
         public ActionResult DeleteConfirmed(int id)
         {
             MessageBoardModel messageBoardModel = db.MessageBoardModels.Find(id);
+            if (messageBoardModel.UserID != User.Identity.GetUserId())
+            {
+                return HttpNotFound();
+            }
             db.MessageBoardModels.Remove(messageBoardModel);
             db.SaveChanges();
             return RedirectToAction("Index");
