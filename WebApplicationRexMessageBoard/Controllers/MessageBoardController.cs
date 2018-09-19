@@ -20,8 +20,8 @@ namespace WebApplicationRexMessageBoard
         [AllowAnonymous]
         public ActionResult Index()
         {
-            //var messageBoardModels = db.MessageBoardModels.Include(m => m.User);
-            return View(db.MessageBoardModels.ToList());
+            ViewBag.messageList = db.MessageBoardModels.ToList();
+            return View();
         }
 
         // GET: MessageBoard/Details/5
