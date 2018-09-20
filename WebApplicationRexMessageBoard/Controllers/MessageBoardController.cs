@@ -210,6 +210,42 @@ namespace WebApplicationRexMessageBoard
             //ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
             return View(messageModel);
         }
+
+        // GET: MessageBoard/MessageDelete/5
+        public ActionResult MessageDelete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MessageModels messageModel = db.MessageModels.Find(id);
+            if (messageModel == null || messageModel.UserID != User.Identity.GetUserId())
+            {
+                return HttpNotFound();
+            }
+            ReplyModels replyModels = db.ReplyModels.Where(r => r.MessageID == id).Single();
+            ViewBag.MessageBoardID = replyModels.MessageBoardID;
+            return View(messageModel);
+        }
+
+        // POST: MessageBoard/Delete/5
+        [HttpPost, ActionName("MessageDelete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult MessageDeleteConfirmed(int id)
+        {
+            MessageModels messageModel = db.MessageModels.Find(id);
+            if (messageModel.UserID != User.Identity.GetUserId())
+            {
+                return HttpNotFound();
+            }
+
+            ReplyModels replyModels = db.ReplyModels.Where(r => r.MessageID == id).Single();
+            db.MessageModels.Remove(messageModel);
+            db.ReplyModels.Remove(replyModels);
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = replyModels.MessageBoardID });
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
