@@ -101,9 +101,9 @@ namespace WebApplicationRexMessageBoard
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Title,Content")] MessageBoardModel messageBoardModel)
         {
-            if (ModelState.IsValid && messageBoardModel.UserID == User.Identity.GetUserId())
+            MessageBoardModel messageBoard = db.MessageBoardModels.Find(messageBoardModel.ID);
+            if (ModelState.IsValid && messageBoard.UserID == User.Identity.GetUserId())
             {
-                MessageBoardModel messageBoard = db.MessageBoardModels.Find(messageBoardModel.ID);
                 messageBoard.Title = messageBoardModel.Title;
                 messageBoard.Content = messageBoardModel.Content;
 
