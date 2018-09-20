@@ -276,6 +276,7 @@
     <Content Include="Views\MessageBoard\Edit.cshtml" />
     <Content Include="Views\MessageBoard\Index.cshtml" />
     <Content Include="Views\Manage\SetUserName.cshtml" />
+    <Content Include="Views\MessageBoard\MessageEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

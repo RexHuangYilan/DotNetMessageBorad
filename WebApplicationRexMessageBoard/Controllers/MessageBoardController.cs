@@ -172,6 +172,44 @@ namespace WebApplicationRexMessageBoard
             //ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
             return DetailsConfirmed(id, messageModel);
         }
+
+        // GET: MessageBoard/Edit/5
+        public ActionResult MessageEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MessageModels messageModel = db.MessageModels.Find(id);
+            if (messageModel == null || messageModel.UserID != User.Identity.GetUserId())
+            {
+                return HttpNotFound();
+            }
+            ReplyModels replyModels = db.ReplyModels.Where(r => r.MessageID == messageModel.ID).Single();
+            ViewBag.MessageBoardID = replyModels.MessageBoardID;
+            return View(messageModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MessageEdit([Bind(Include = "ID, Content")] MessageModels messageModel)
+        {
+            MessageModels message = db.MessageModels.Find(messageModel.ID);
+            ReplyModels replyModels = db.ReplyModels.Where(r => r.MessageID == messageModel.ID).Single();
+            ViewBag.MessageBoardID = replyModels.MessageBoardID;
+
+            if (ModelState.IsValid && message.UserID == User.Identity.GetUserId())
+            {
+                message.Content = messageModel.Content;
+
+                db.Entry(message).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("Details", new { id = replyModels.MessageBoardID });
+            }
+            //ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
+            return View(messageModel);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
