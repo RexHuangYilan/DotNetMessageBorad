@@ -33,5 +33,9 @@ namespace WebApplicationRexMessageBoard.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<WebApplicationRexMessageBoard.Models.MessageBoardModel> MessageBoardModels { get; set; }
+        public System.Data.Entity.DbSet<WebApplicationRexMessageBoard.Models.MessageModels> MessageModels { get; set; }
+        public System.Data.Entity.DbSet<WebApplicationRexMessageBoard.Models.ReplyModels> ReplyModels { get; set; }
     }
 }

@@ -20,6 +20,10 @@ namespace WebApplicationRexMessageBoard.DAL
         {
             //modelBuilder.Entity<ReplyModels>().HasKey(d => new { d.MessageBoard, d.Message });
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<ReplyModels>().HasRequired(r => r.MessageBoard).WithMany(p => p.Reply).WillCascadeOnDelete(false);
+            modelBuilder.Entity<ReplyModels>().HasRequired(r => r.Message).WithMany(p => p.Reply).WillCascadeOnDelete(false);
+            modelBuilder.Entity<MessageModels>().HasRequired(r => r.User).WithMany(p => p.Message).WillCascadeOnDelete(false);
         }
+
     }
 }

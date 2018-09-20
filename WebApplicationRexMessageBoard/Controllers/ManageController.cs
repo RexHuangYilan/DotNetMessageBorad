@@ -277,6 +277,41 @@ namespace WebApplicationRexMessageBoard.Controllers
         }
 
         //
+        // GET: /Manage/SetUserName
+        public ActionResult SetUserName()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Manage/SetUserName
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SetUserName(SetUserNameViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userTemp = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                userTemp.UserName = model.UserName;
+
+                var result = await UserManager.UpdateAsync(userTemp);
+                if (result.Succeeded)
+                {
+                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                    if (user != null)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    }
+
+                    return RedirectToAction("Index");
+                }
+            }
+
+            // 如果執行到這裡，發生某項失敗，則重新顯示表單
+            return View(model);
+        }
+
+        //
         // GET: /Manage/ManageLogins
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
