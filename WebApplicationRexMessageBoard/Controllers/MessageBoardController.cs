@@ -28,6 +28,13 @@ namespace WebApplicationRexMessageBoard
         [AllowAnonymous]
         public ActionResult Details(int? id)
         {
+            return DetailsConfirmed(id, null);
+        }
+
+        // GET: MessageBoard/Details/5
+        [AllowAnonymous]
+        public ActionResult DetailsConfirmed(int? id, MessageModels messageModel)
+        {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -37,7 +44,11 @@ namespace WebApplicationRexMessageBoard
             {
                 return HttpNotFound();
             }
-            return View(messageBoardModel);
+            var replayQuery = db.ReplyModels.Include(c => c.Message);
+            var messages = replayQuery.Where(i => i.MessageBoardID == id).Select(c => c.Message).ToList();
+            ViewBag.messageList = messages;
+            ViewBag.MessageBoardModel = messageBoardModel;
+            return View(messageModel);
         }
 
         // GET: MessageBoard/Create

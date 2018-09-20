@@ -1,9 +1,12 @@
-﻿@model WebApplicationRexMessageBoard.Models.MessageBoardModel
+﻿@model WebApplicationRexMessageBoard.Models.MessageModels
+
 @using Microsoft.AspNet.Identity
 
 
 @{
     ViewBag.Title = "Details";
+    List<WebApplicationRexMessageBoard.Models.MessageModels> models = ViewBag.messageList;
+    WebApplicationRexMessageBoard.Models.MessageBoardModel detailModel = ViewBag.MessageBoardModel;
 }
 
 <h2>Details</h2>
@@ -11,45 +14,111 @@
 <div>
     <h4>MessageBoardModel</h4>
     <hr />
+    <p>
+        @if (Request.IsAuthenticated && detailModel.User.Id == User.Identity.GetUserId())
+        {
+            @Html.ActionLink("Edit", "Edit", new { id = detailModel.ID }) @(" | ")
+        }
+        @Html.ActionLink("Back to List", "Index")
+    </p>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.User.Email)
+            @Html.DisplayNameFor(model => detailModel.User.UserName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User.Email)
+            @Html.DisplayFor(model => detailModel.User.UserName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => detailModel.Title)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => detailModel.Title)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Content)
+            @Html.DisplayNameFor(model => detailModel.Content)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Content)
+            @Html.DisplayFor(model => detailModel.Content)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreateTime)
+            @Html.DisplayNameFor(model => detailModel.CreateTime)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreateTime)
+            @Html.DisplayFor(model => detailModel.CreateTime)
         </dd>
 
     </dl>
 </div>
-<p>
-    @if (Request.IsAuthenticated && Model.User.Id == User.Identity.GetUserId())
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Content)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateTime)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in models)
     {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) @(" | ")
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateTime)
+            </td>
+            <td>
+                @if (Request.IsAuthenticated && item.User.Id == User.Identity.GetUserId())
+                {
+                    @Html.ActionLink("Edit", "MessageEdit", new { id = item.ID }) @(" | ")
+                    @Html.ActionLink("Delete", "MessageDelete", new { id = item.ID })
+                }
+            </td>
+
+        </tr>
     }
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+
+
+</table>
+
+@using (Html.BeginForm("CreateMessage", "MessageBoard", new { id = detailModel.ID }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>MessageBoardModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
