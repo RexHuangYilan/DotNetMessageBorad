@@ -145,6 +145,33 @@ namespace WebApplicationRexMessageBoard
             return RedirectToAction("Index");
         }
 
+        // POST: MessageBoard/CreateMessage/5
+        [HttpPost, ActionName("CreateMessage")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(int id, [Bind(Include = "Content")] MessageModels messageModel)
+        {
+            if (ModelState.IsValid)
+            {
+                messageModel.CreateTime = DateTime.Now;
+                messageModel.UserID = User.Identity.GetUserId();
+                db.MessageModels.Add(messageModel);
+                db.SaveChanges();
+
+                ReplyModels replyModels = new ReplyModels()
+                {
+                    MessageBoardID = id,
+                    MessageID = messageModel.ID
+                };
+
+                db.ReplyModels.Add(replyModels);
+                db.SaveChanges();
+
+                return RedirectToAction("Details", new { id = id });
+            }
+
+            //ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
+            return DetailsConfirmed(id, messageModel);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
