@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace WebApplicationRexMessageBoard.Models
     {
         public int ID { get; set; }
 
+        [DisplayName("回覆內容")]
         [MaxLength(255)]
         [Required]
         public string Content { get; set; }
