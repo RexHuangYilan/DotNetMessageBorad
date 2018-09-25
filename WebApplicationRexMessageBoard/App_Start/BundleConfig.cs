@@ -28,6 +28,8 @@ namespace WebApplicationRexMessageBoard
 
             bundles.Add(new StyleBundle("~/Content/message-board").Include(
                       "~/Content/message-board.css"));
+            bundles.Add(new StyleBundle("~/bundles/messageFunction").Include(
+                      "~/Scripts/messageFunction.js"));
         }
     }
 }
