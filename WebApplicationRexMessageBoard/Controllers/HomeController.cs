@@ -10,7 +10,7 @@ namespace WebApplicationRexMessageBoard.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return Redirect("/MessageBoard/");
         }
 
         public ActionResult About()
