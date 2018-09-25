@@ -20,6 +20,8 @@ namespace WebApplicationRexMessageBoard.Models
         public string Content { get; set; }
 
         //[NotMapped]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
+        [DataType(DataType.Date)]
         public DateTime? CreateTime { get; set; }
 
         //[Required]
