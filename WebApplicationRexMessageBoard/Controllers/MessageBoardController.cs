@@ -20,7 +20,7 @@ namespace WebApplicationRexMessageBoard
         [AllowAnonymous]
         public ActionResult Index()
         {
-            ViewBag.messageList = db.MessageBoardModels.ToList();
+            ViewBag.messageList = db.MessageBoardModels.ToList().OrderByDescending(m => m.CreateTime);
             return View();
         }
 
