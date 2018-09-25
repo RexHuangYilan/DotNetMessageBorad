@@ -18,13 +18,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("應用程式名稱", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("小黃留言板", "Index", "MessageBoard", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
-                    <li>@Html.ActionLink("留言版", "Index", "MessageBoard")</li>
-                </ul>
+                <!--<ul class="nav navbar-nav">
+        <li>@Html.ActionLink("首頁", "Index", "Home")</li>
+        <li>@Html.ActionLink("留言版", "Index", "MessageBoard")</li>
+    </ul>-->
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
