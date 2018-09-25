@@ -41,50 +41,38 @@
             </div>
         </div>
     </div>
-</div>
 
-<h4>回覆</h4>
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.User.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Content)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreateTime)
-        </th>
-        <th></th>
-    </tr>
+    <hr />
 
     @foreach (var item in models)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateTime)
-            </td>
-            <td>
-                @if (Request.IsAuthenticated && item.User.Id == User.Identity.GetUserId())
-                {
-                    @Html.ActionLink("Edit", "MessageEdit", new { id = item.ID }) @(" | ")
-                    @Html.ActionLink("Delete", "MessageDelete", new { id = item.ID })
-                }
-            </td>
+        <div class="bs-calltoaction bs-calltoaction-info">
+            <div class="col">
+                <div class="row cta-desc">
+                    <p class="col-md-12 lead">@Html.DisplayFor(modelItem => item.Content)</p>
+                </div>
+                <div class="row">
+                    @if (Request.IsAuthenticated && item.User.Id == User.Identity.GetUserId())
+                    {
+                        <div class="col-md-2 cta-button">
+                            <a href="../MessageEdit/@item.ID" class="btn btn-lg btn-block btn-info">編輯</a>
+                        </div>
+                        <div class="col-md-2 cta-button">
+                            <a href="../MessageDelete/@item.ID" class="btn btn-lg btn-block btn-info">刪除</a>
+                        </div>
+                    }
 
-        </tr>
+
+                    <div class="col-md-4 pull-right">
+                        <span class="col pull-right rex-message-createtime">@Html.DisplayFor(modelItem => item.CreateTime)</span>
+                        <span class="col pull-right rex-message-username">@Html.DisplayFor(modelItem => item.User.UserName)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 
-
-
-</table>
+</div>
 
 <hr />
 
