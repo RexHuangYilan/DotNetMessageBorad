@@ -9,50 +9,38 @@
     WebApplicationRexMessageBoard.Models.MessageBoardModel detailModel = ViewBag.MessageBoardModel;
 }
 
-<h2>Details</h2>
+@Styles.Render("~/Content/message-board")
 
-<div>
-    <p>
-        @if (Request.IsAuthenticated && detailModel.User.Id == User.Identity.GetUserId())
-        {
-            @Html.ActionLink("Edit", "Edit", new { id = detailModel.ID }) @(" | ")
-        }
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => detailModel.User.UserName)
-        </dt>
+<div class="col-sm-12 rex-body">
+    <div class="bs-calltoaction bs-calltoaction-primary">
+        <div class="col">
+            <div class="row cta-contents">
+                <h1 class="cta-title">
+                    @Html.DisplayFor(model => detailModel.Title)
+                </h1>
+            </div>
+            <div class="row cta-desc">
+                <p class="col-md-12 lead">@Html.DisplayFor(model => detailModel.Content)</p>
+            </div>
+            <div class="row">
+                @if (Request.IsAuthenticated && detailModel.User.Id == User.Identity.GetUserId())
+                {
+                    <div class="col-md-2 cta-button">
+                        <a href="../Edit/@detailModel.ID" class="btn btn-lg btn-block btn-primary">編輯</a>
+                    </div>
+                    <div class="col-md-2 cta-button">
+                        <a href="../Delete/@detailModel.ID" class="btn btn-lg btn-block btn-primary">刪除</a>
+                    </div>
+                }
 
-        <dd>
-            @Html.DisplayFor(model => detailModel.User.UserName)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => detailModel.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => detailModel.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => detailModel.Content)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => detailModel.Content)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => detailModel.CreateTime)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => detailModel.CreateTime)
-        </dd>
-
-    </dl>
+                <div class="col-md-4 pull-right">
+                    <span class="col pull-right rex-message-createtime">@Html.DisplayFor(model => detailModel.CreateTime)</span>
+                    <span class="col pull-right rex-message-username">@Html.DisplayFor(model => detailModel.User.UserName)</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <h4>回覆</h4>
