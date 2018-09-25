@@ -23,17 +23,17 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2 cta-button">
-                        <a href="Details/@item.ID" class="btn btn-lg btn-block btn-primary">回覆</a>
+                        @Html.ActionLink("回覆", "Details", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-primary" })
                     </div>
 
                     @if (Request.IsAuthenticated && item.User.Id == User.Identity.GetUserId())
                     {
-                        <div class="col-md-2 cta-button">
-                            <a href="Edit/@item.ID" class="btn btn-lg btn-block btn-primary">編輯</a>
-                        </div>
-                        <div class="col-md-2 cta-button">
-                            <a href="Delete/@item.ID" class="btn btn-lg btn-block btn-primary">刪除</a>
-                        </div>
+                    <div class="col-md-2 cta-button">
+                        @Html.ActionLink("編輯", "Edit", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-primary" })
+                    </div>
+                    <div class="col-md-2 cta-button">
+                        @Html.ActionLink("刪除", "Delete", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-primary" })
+                    </div>
                     }
 
 
@@ -72,7 +72,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default"/>
+                    <input type="submit" value="留言" class="btn btn-default"/>
                 </div>
             </div>
         </div>

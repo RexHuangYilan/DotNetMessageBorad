@@ -25,12 +25,12 @@
             <div class="row">
                 @if (Request.IsAuthenticated && detailModel.User.Id == User.Identity.GetUserId())
                 {
-                    <div class="col-md-2 cta-button">
-                        <a href="../Edit/@detailModel.ID" class="btn btn-lg btn-block btn-primary">編輯</a>
-                    </div>
-                    <div class="col-md-2 cta-button">
-                        <a href="../Delete/@detailModel.ID" class="btn btn-lg btn-block btn-primary">刪除</a>
-                    </div>
+                <div class="col-md-2 cta-button">
+                    @Html.ActionLink("編輯", "Edit", new { id = detailModel.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-primary" })
+                </div>
+                <div class="col-md-2 cta-button">
+                    @Html.ActionLink("刪除", "Delete", new { id = detailModel.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-primary" })
+                </div>
                 }
 
 
@@ -54,12 +54,12 @@
                 <div class="row">
                     @if (Request.IsAuthenticated && item.User.Id == User.Identity.GetUserId())
                     {
-                        <div class="col-md-2 cta-button">
-                            <a href="../MessageEdit/@item.ID" class="btn btn-lg btn-block btn-info">編輯</a>
-                        </div>
-                        <div class="col-md-2 cta-button">
-                            <a href="../MessageDelete/@item.ID" class="btn btn-lg btn-block btn-info">刪除</a>
-                        </div>
+                    <div class="col-md-2 cta-button">
+                        @Html.ActionLink("編輯", "MessageEdit", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-info" })
+                    </div>
+                    <div class="col-md-2 cta-button">
+                        @Html.ActionLink("刪除", "MessageDelete", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-info" })
+                    </div>
                     }
 
 
@@ -92,7 +92,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    <input type="submit" value="回覆" class="btn btn-default" />
                 </div>
             </div>
         </div>
