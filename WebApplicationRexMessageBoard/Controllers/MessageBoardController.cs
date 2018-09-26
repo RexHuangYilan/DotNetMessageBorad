@@ -133,16 +133,47 @@ namespace WebApplicationRexMessageBoard
         // POST: MessageBoard/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteHTML(int id)
+        {
+            MessageBoardModel messageBoardModel = DeleteConfirmed(id);
+            if (messageBoardModel == null)
+            {
+                return HttpNotFound();
+            }
+            
+            return RedirectToAction("Index");
+        }
+
+        // POST: MessageBoard/Delete/5
+        [HttpPost, ActionName("DeleteAJAX")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteAJAX(int id)
+        {
+            MessageBoardModel messageBoardModel = DeleteConfirmed(id);
+            if (messageBoardModel == null)
+            {
+                return Json(new Dictionary<string, int>());
+            }
+
+            var json = new Dictionary<string, int>()
+            {
+                { "MessageBoardID", messageBoardModel.ID }
+            };
+
+            return Json(json);
+        }
+
+        // POST: MessageBoard/Delete/5
+        private MessageBoardModel DeleteConfirmed(int id)
         {
             MessageBoardModel messageBoardModel = db.MessageBoardModels.Find(id);
             if (messageBoardModel.UserID != User.Identity.GetUserId())
             {
-                return HttpNotFound();
+                return null;
             }
             db.MessageBoardModels.Remove(messageBoardModel);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return messageBoardModel;
         }
 
         // POST: MessageBoard/CreateMessage/5
