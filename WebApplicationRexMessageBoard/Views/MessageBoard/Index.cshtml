@@ -1,9 +1,12 @@
 ﻿@model WebApplicationRexMessageBoard.Models.MessageBoardModel
 @using Microsoft.AspNet.Identity
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
 
 @{
     ViewBag.Title = "Index";
-    IEnumerable<WebApplicationRexMessageBoard.Models.MessageBoardModel> models = ViewBag.messageList;
+    PagedList.IPagedList<WebApplicationRexMessageBoard.Models.MessageBoardModel> models = ViewBag.messageList;
 }
 
 @section scripts {
@@ -16,45 +19,47 @@
 
 @Styles.Render("~/Content/message-board")
 
-<div class="col-sm-12 rex-body">
+    <div class="col-sm-12 rex-body">
+        @Html.PagedListPager(models, page => Url.Action("Index", new { page }))
 
-    @foreach (var item in models)
-    {
-        <div class="bs-calltoaction bs-calltoaction-primary" id="message_@item.ID">
-            <div class="col">
-                <div class="row cta-contents">
-                    <h1 class="cta-title">
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </h1>
-                </div>
-                <div class="row cta-desc">
-                    <p class="col-md-12 lead">@Html.DisplayFor(modelItem => item.Content)</p>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 cta-button">
-                        @Html.ActionLink("回覆", "Details", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-primary" })
+        @foreach (var item in models)
+        {
+            <div class="bs-calltoaction bs-calltoaction-primary" id="message_@item.ID">
+                <div class="col">
+                    <div class="row cta-contents">
+                        <h1 class="cta-title">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </h1>
                     </div>
-
-                    @if (Request.IsAuthenticated && item.User.Id == User.Identity.GetUserId())
-                    {
+                    <div class="row cta-desc">
+                        <p class="col-md-12 lead">@Html.DisplayFor(modelItem => item.Content)</p>
+                    </div>
+                    <div class="row">
                         <div class="col-md-2 cta-button">
-                            @Html.ActionLink("編輯", "Edit", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-primary" })
+                            @Html.ActionLink("回覆", "Details", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-primary" })
                         </div>
-                        <div class="col-md-2 cta-button">
-                            <a href="javascript:void(0)" class="btn btn-lg btn-block btn-primary" onclick='$.fn.deleteMessage(@(item.ID), $("@("#message_"+item.ID)"), token);'>刪除</a>
-                        </div>
-                    }
+
+                        @if (Request.IsAuthenticated && item.User.Id == User.Identity.GetUserId())
+                        {
+                            <div class="col-md-2 cta-button">
+                                @Html.ActionLink("編輯", "Edit", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-lg btn-block btn-primary" })
+                            </div>
+                            <div class="col-md-2 cta-button">
+                                <a href="javascript:void(0)" class="btn btn-lg btn-block btn-primary" onclick='$.fn.deleteMessage(@(item.ID), $("@("#message_"+item.ID)"), token);'>刪除</a>
+                            </div>
+                        }
 
 
-                    <div class="col-md-4 pull-right">
-                        <span class="col pull-right rex-message-createtime">@Html.DisplayFor(modelItem => item.CreateTime)</span>
-                        <span class="col pull-right rex-message-username">@Html.DisplayFor(modelItem => item.User.UserName)</span>
+                        <div class="col-md-4 pull-right">
+                            <span class="col pull-right rex-message-createtime">@Html.DisplayFor(modelItem => item.CreateTime)</span>
+                            <span class="col pull-right rex-message-username">@Html.DisplayFor(modelItem => item.User.UserName)</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+
+    </div>
 
 <footer class="navbar navbar-default navbar-fixed-bottom" role="navigation">
     @using (Html.BeginForm("Create", "MessageBoard"))

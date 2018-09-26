@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplicationRexMessageBoard.Models;
+using PagedList;
 
 namespace WebApplicationRexMessageBoard
 {
@@ -18,9 +19,12 @@ namespace WebApplicationRexMessageBoard
 
         // GET: MessageBoard
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            ViewBag.messageList = db.MessageBoardModels.ToList().OrderByDescending(m => m.CreateTime);
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            ViewBag.messageList = db.MessageBoardModels.ToList().OrderByDescending(m => m.CreateTime).ToPagedList(pageNumber, pageSize);
+            
             return View();
         }
 
