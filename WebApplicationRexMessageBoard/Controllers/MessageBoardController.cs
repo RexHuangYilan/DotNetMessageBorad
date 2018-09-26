@@ -262,9 +262,9 @@ namespace WebApplicationRexMessageBoard
         // POST: MessageBoard/Delete/5
         [HttpPost, ActionName("MessageDelete")]
         [ValidateAntiForgeryToken]
-        public ActionResult MessageDeleteConfirmed(int id)
+        public ActionResult MessageDeleteHTML(int id)
         {
-            ReplyModels replyModel = MessageDeleteCionfirmed(id);
+            ReplyModels replyModel = MessageDeleteConfirmed(id);
             if (replyModel == null)
             {
                 return HttpNotFound();
@@ -275,22 +275,24 @@ namespace WebApplicationRexMessageBoard
 
         [HttpPost, ActionName("MessageDeleteAJAX")]
         [ValidateAntiForgeryToken]
-        public ActionResult MessageDeleteCionfirmedAJAX(int id)
+        public ActionResult MessageDeleteAJAX(int id)
         {
-            ReplyModels replyModel = MessageDeleteCionfirmed(id);
+            ReplyModels replyModel = MessageDeleteConfirmed(id);
 
             if (replyModel == null)
             {
-                return HttpNotFound();
+                return Json(new Dictionary<string, int>());
             }
 
-            Dictionary<string, int> json = new Dictionary<string, int>();
-            json.Add("MessageID", replyModel.MessageID);
+            var json = new Dictionary<string, int>()
+            {
+                { "MessageID", replyModel.MessageID }
+            };
 
             return Json(json);
         }
 
-        private ReplyModels MessageDeleteCionfirmed(int id)
+        private ReplyModels MessageDeleteConfirmed(int id)
         {
             MessageModels messageModel = db.MessageModels.Find(id);
             if (messageModel.UserID != User.Identity.GetUserId())
@@ -300,7 +302,6 @@ namespace WebApplicationRexMessageBoard
 
             ReplyModels replyModels = db.ReplyModels.Where(r => r.MessageID == id).Single();
             db.MessageModels.Remove(messageModel);
-            db.ReplyModels.Remove(replyModels);
             db.SaveChanges();
 
             return replyModels;
