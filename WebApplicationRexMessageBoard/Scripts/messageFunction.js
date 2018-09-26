@@ -6,7 +6,7 @@
             return;
         }
         
-        var url = 'Delete/' + id;
+        var url = '/MessageBoard/DeleteAJAX/' + id;
         $.fn.deleteMessageAJAX(url, element, token);
     };
 
@@ -16,7 +16,7 @@
             return;
         }
 
-        var url = '../MessageDeleteAJAX/' + id;
+        var url = '/MessageBoard/MessageDeleteAJAX/' + id;
         $.fn.deleteMessageAJAX(url, element, token);
     };
 
