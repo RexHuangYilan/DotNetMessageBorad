@@ -233,17 +233,46 @@ namespace WebApplicationRexMessageBoard
         [ValidateAntiForgeryToken]
         public ActionResult MessageDeleteConfirmed(int id)
         {
+            ReplyModels replyModel = MessageDeleteCionfirmed(id);
+            if (replyModel == null)
+            {
+                return HttpNotFound();
+            }
+
+            return RedirectToAction("Details", new { id = replyModel.MessageBoardID });
+        }
+
+        [HttpPost, ActionName("MessageDeleteAJAX")]
+        [ValidateAntiForgeryToken]
+        public ActionResult MessageDeleteCionfirmedAJAX(int id)
+        {
+            ReplyModels replyModel = MessageDeleteCionfirmed(id);
+
+            if (replyModel == null)
+            {
+                return HttpNotFound();
+            }
+
+            Dictionary<string, int> json = new Dictionary<string, int>();
+            json.Add("MessageID", replyModel.MessageID);
+
+            return Json(json);
+        }
+
+        private ReplyModels MessageDeleteCionfirmed(int id)
+        {
             MessageModels messageModel = db.MessageModels.Find(id);
             if (messageModel.UserID != User.Identity.GetUserId())
             {
-                return HttpNotFound();
+                return null;
             }
 
             ReplyModels replyModels = db.ReplyModels.Where(r => r.MessageID == id).Single();
             db.MessageModels.Remove(messageModel);
             db.ReplyModels.Remove(replyModels);
             db.SaveChanges();
-            return RedirectToAction("Details", new { id = replyModels.MessageBoardID });
+
+            return replyModels;
         }
 
         protected override void Dispose(bool disposing)
