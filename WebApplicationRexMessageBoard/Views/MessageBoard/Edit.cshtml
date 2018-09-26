@@ -10,34 +10,29 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>發言編輯</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+    <div class="bs-calltoaction bs-calltoaction-primary">
+        <div class="col">
+            <div class="row cta-contents">
                 @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Content, new { @class = "form-control rex-create-textarea" })
+            <div class="row cta-desc">
+                @Html.TextAreaFor(model => model.Content, new { @class = "rex-edit-textarea form-control", style = "height: 150px" })
                 @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
             </div>
-        </div>
+            <div class="row">
+                <div class="col-md-2 cta-button">
+                    <input type="submit" value="確定修改" class="btn btn-lg btn-block btn-primary" />
+                </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="確定修改" class="btn btn-default" />
             </div>
         </div>
     </div>
+</div>
 }
 
 <div>

@@ -119,6 +119,11 @@
     resize: none;
 }
 
+.rex-edit-textarea {
+    height: 150px;
+    resize: none;
+}
+
 .rex-body {
     margin-bottom: 150px
 }
