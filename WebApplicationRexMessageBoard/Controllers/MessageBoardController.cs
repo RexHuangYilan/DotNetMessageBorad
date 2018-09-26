@@ -30,14 +30,14 @@ namespace WebApplicationRexMessageBoard
 
         // GET: MessageBoard/Details/5
         [AllowAnonymous]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, int? page)
         {
-            return DetailsConfirmed(id, null);
+            return DetailsConfirmed(id, null, page);
         }
 
         // GET: MessageBoard/Details/5
         [AllowAnonymous]
-        public ActionResult DetailsConfirmed(int? id, MessageModels messageModel)
+        public ActionResult DetailsConfirmed(int? id, MessageModels messageModel, int? page)
         {
             if (id == null)
             {
@@ -49,7 +49,11 @@ namespace WebApplicationRexMessageBoard
                 return HttpNotFound();
             }
             var replayQuery = db.ReplyModels.Include(c => c.Message);
-            var messages = replayQuery.Where(i => i.MessageBoardID == id).Select(c => c.Message).ToList();
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+
+            var messages = replayQuery.Where(i => i.MessageBoardID == id).Select(c => c.Message).OrderByDescending(m => m.CreateTime).ToPagedList(pageNumber, pageSize);
             ViewBag.messageList = messages;
             ViewBag.MessageBoardModel = messageBoardModel;
             return View(messageModel);
@@ -205,7 +209,7 @@ namespace WebApplicationRexMessageBoard
             }
 
             //ViewBag.UserID = new SelectList(db.ApplicationUsers, "Id", "Email", messageBoardModel.UserID);
-            return DetailsConfirmed(id, messageModel);
+            return DetailsConfirmed(id, messageModel, 0);
         }
 
         // GET: MessageBoard/Edit/5

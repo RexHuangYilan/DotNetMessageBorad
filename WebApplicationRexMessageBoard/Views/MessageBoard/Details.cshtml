@@ -1,11 +1,11 @@
 ﻿@model WebApplicationRexMessageBoard.Models.MessageModels
-
+@using PagedList.Mvc;
 @using Microsoft.AspNet.Identity
 
 
 @{
     ViewBag.Title = "Details";
-    List<WebApplicationRexMessageBoard.Models.MessageModels> models = ViewBag.messageList;
+    PagedList.IPagedList<WebApplicationRexMessageBoard.Models.MessageModels> models = ViewBag.messageList;
     WebApplicationRexMessageBoard.Models.MessageBoardModel detailModel = ViewBag.MessageBoardModel;
 }
 
@@ -66,6 +66,7 @@
     </div>
 
     <hr />
+    @Html.PagedListPager(models, page => Url.Action("Details", new { page }))
 
     @foreach (var item in models)
     {
